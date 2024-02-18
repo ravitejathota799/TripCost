@@ -1,0 +1,28 @@
+List<WebElement> homeList = driver.findElements(hotelClick);
+		List<List<String>> values = new ArrayList<>();
+		for (int i = 0; i < 3; i++) {
+			driver.manage().timeouts().implicitlyWait(Duration.ofMinutes(2));
+			homeList.get(i).click();
+			ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles()); // handling multiple windows
+			driver.switchTo().window(tabs.get(i + 1)); // switching the tab
+			new WebDriverWait(driver, Duration.ofMinutes(2)).ignoring(NoSuchElementException.class)
+					.until(ExpectedConditions.visibilityOfElementLocated(
+							By.xpath("//button[@class='rmyCe _G B- z _S c Wc wSSLS w AeLHi XDcOZ']")));
+			new WebDriverWait(driver, Duration.ofMinutes(2)).ignoring(NoSuchElementException.class).until(
+					ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1[@class='biGQs _P fiohW uuBRH']")));
+
+			// Add rows to the 2D list
+			values.add(List.of(driver.findElement(hotelName).getText().toString(),
+					driver.findElement(chargesPerNight).getText().toString(),
+					driver.findElement(totalPrice).getText().toString()));
+			driver.manage().timeouts().implicitlyWait(Duration.ofMinutes(2));
+			driver.switchTo().window(tabs.get(0));
+		}
+		for (int i = 1; i < values.size(); i++) {
+			List<String> row = values.get(i);
+			for (int j = 0; j < row.size(); j++) {
+				DataReader.setCellData(file, "Prices", i, j, row.get(j));
+				System.out.print(row.get(j) + "\t");
+			}
+			System.out.println();
+		}
