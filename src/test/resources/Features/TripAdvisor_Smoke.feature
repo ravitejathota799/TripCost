@@ -2,7 +2,7 @@
 Feature: Calculate Trip Cost in the trip advisor website Smoke TestSuite
 
   @smoke
-  Scenario Outline: searching for any holiday home in the trip advisor website
+  Scenario: searching for any holiday home in the trip advisor website
     Given user launches the browser with url
     When user click on Trips in trip advisor website
     And user click on holiday homes in the trip advisor website
